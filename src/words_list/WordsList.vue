@@ -1,10 +1,10 @@
 <template>
   <div class="main">
-    <h1>Russian-English dictionary</h1>
-    <h2>Русско-английский словарь</h2>
-    <p class = "description">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
+    <h2>Список слов в словаре</h2>
+      <div class="word-pair">
+        <div v-for="(word, index) in words" :key="index" class="ru">{{word.russian}}</div>
+        <div v-for="(word, index) in words" :key="index" class = "en">{{word.english}}</div>
+    </div>
     <div class = "links">
       <p><a href="../add_word">Добавить слово</a></p>
       <p><a href="../">Назад</a></p>
@@ -13,10 +13,24 @@
 </template>
 
 <script>
+import io from "socket.io-client";
 export default {
   name: 'WordsList',
+  data() {
+    return {
+      words: []
+    }
+  },
   created() {
-        document.title = "List of words"
+    document.title = "List of words";
+    this.socket = io("http://localhost:3000");
+    this.socket.emit("fetchWords");
+
+  },
+  mounted() {
+    this.socket.on("wordlist", data => {
+      this.words = data;
+    });
   }
 }
 </script>
