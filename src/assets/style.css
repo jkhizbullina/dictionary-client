@@ -85,6 +85,10 @@ body {
     display: block;
 }
 
+.add-word button:hover {
+    background-color: #89b9bb;
+}
+
 .links
 {
     margin-top:10px;
